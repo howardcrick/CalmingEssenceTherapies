@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CalmingEssenceTherapies.App.ViewModels"
+             x:Class="CalmingEssenceTherapies.App.Views.AddTreatmentView"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="Add Treatment"
+             x:DataType="viewModels:AddTreatmentViewModel"
+             x:Name="AddTreatment">
+    <ContentPage.Resources>
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Green" />
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference AddTreatment}, x:DataType=ContentPage}" />
+    </ContentPage.Behaviors>
+    <VerticalStackLayout>
+        <Picker 
+            Title="Select Category"
+            ItemsSource="{Binding Categories}"
+            ItemDisplayBinding="{Binding Name}"
+            SelectedItem="{Binding SelectedCategory}" />
+
+        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
+
+            <Label Text="Name:"        Grid.Row="0" Margin="0,0,5,0" />
+            <Label Text="Description:" Grid.Row="1" Margin="0,0,5,0" />
+            <Label Text="Price:"       Grid.Row="2" Margin="0,0,5,0" />
+
+            <Entry Text="{Binding Name}" Placeholder="Name" Grid.Row="0" Grid.Column="1" />
+            <Entry Text="{Binding Description}" Placeholder="Enter Description" Grid.Row="1" Grid.Column="1" />
+            <Entry Text="{Binding Price}" Placeholder="Enter Price" Keyboard="Numeric" Grid.Row="2" Grid.Column="1"
+                Unfocused="PriceEntry_Unfocused"
+                Focused="PriceEntry_Focused">
+            </Entry>
+        </Grid>
+        <Button Text="Select Treatment Image" Command="{Binding SelectTreatmentImageCommand}" />
+        <Label Text="{Binding TreatmentImageFileName}" />
+        <Button Text="Add Treatment" Command="{Binding AddTreatmentCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="CalmingEssenceTherapies.API/CalmingEssenceTherapies.API.csproj" />
+  <Project Path="CalmingEssenceTherapies.App/CalmingEssenceTherapies.App.csproj" Id="19e9ce95-0d99-4b57-b210-ca5ec16196ee" />
+  <Project Path="CalmingEssenceTherapies.Data/CalmingEssenceTherapies.Data.csproj" />
+  <Project Path="CalmingEssenceTherapies.Services/CalmingEssenceTherapies.Services.csproj" Id="8b1d766e-da0d-4786-bf87-2fdd229d0721" />
+</Solution>
