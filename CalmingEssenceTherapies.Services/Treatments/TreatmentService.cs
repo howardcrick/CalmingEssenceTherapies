@@ -3,6 +3,7 @@ using CalmingEssenceTherapies.Data.Models;
 using CalmingEssenceTherapies.Services.Treatments.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
 
 namespace CalmingEssenceTherapies.Services.Treatments;
 
@@ -46,6 +47,17 @@ public class TreatmentService : ITreatmentService
             }).SingleAsync();
     }
 
+    public async Task<List<ManageTreatmentDto>> GetAllTreatments()
+    {
+        return await _context.Treatments
+            .Select(x => new ManageTreatmentDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price
+            }).ToListAsync();
+    }
+
     public async Task AddTreatment(string name, string? description, decimal price, int categoryId, IFormFile? treatmentImage)
     {
         var categoryExists = await _context.Categories
@@ -58,9 +70,12 @@ public class TreatmentService : ITreatmentService
                 nameof(categoryId));
         }
 
-        var imageUrl = treatmentImage is not null
-            ? await SaveTreatmentImageAsync(treatmentImage)
-            : null;
+        string? imageUrl = null;
+
+        if (treatmentImage != null)
+        {
+            imageUrl = await SaveTreatmentImageAsync(treatmentImage);
+        }
 
         var newTreatment = new Treatment
         {
@@ -110,6 +125,13 @@ public class TreatmentDto
     public required int Id { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }
+    public required decimal Price { get; set; }
+}
+
+public class ManageTreatmentDto
+{
+    public required int Id { get; set; }
+    public required string Name { get; set; }
     public required decimal Price { get; set; }
 }
 

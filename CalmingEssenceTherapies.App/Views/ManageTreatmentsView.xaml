@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CalmingEssenceTherapies.App.ViewModels"
+             xmlns:models="clr-namespace:CalmingEssenceTherapies.App.Models"
+             x:Class="CalmingEssenceTherapies.App.Views.ManageTreatmentsView"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:CalmingEssenceTherapies.App.Views.Controls"
+             x:DataType="viewModels:ManageTreatmentsViewModel"
+             Title="Manage Treatments"
+             x:Name="ManageTreatments">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior 
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference ManageTreatments}, x:DataType=ContentPage}" />
+    </ContentPage.Behaviors>
+    <VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding Treatments}" Margin="10" SelectionChangedCommand="{Binding EditTreatmentCommand}" SelectedItem="{Binding SelectedTreatment}" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ManageTreatment">
+                    <Border Stroke="{StaticResource PrimaryBrush}" StrokeThickness="1" Padding="5" Margin="0,0,0,10">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Name}" Grid.Column="0"/>
+                            <Label Text="{Binding Price, StringFormat='{0:C}'}" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <controls:AddButton Command="{Binding AddTreatmentCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

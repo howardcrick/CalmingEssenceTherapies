@@ -4,6 +4,7 @@ using CalmingEssenceTherapies.App.ViewModels;
 using CalmingEssenceTherapies.App.Views;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace CalmingEssenceTherapies.App
 {
@@ -25,6 +26,8 @@ namespace CalmingEssenceTherapies.App
             builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton<IFilePickerService, FilePickerService>();
+            builder.Services.AddTransient<ManageTreatmentsView>();
+            builder.Services.AddTransient<ManageTreatmentsViewModel>();
             builder.Services.AddTransient<TreatmentDetailsView>();
             builder.Services.AddTransient<TreatmentDetailsViewModel>();
             builder.Services.AddTransient<AddTreatmentView>();
@@ -39,7 +42,9 @@ namespace CalmingEssenceTherapies.App
             builder.Services.AddHttpClient<ICategoryService, CategoryService>(client =>
             {
                 client.BaseAddress = new Uri(Constants.RestUrl);
-            }).ConfigurePrimaryHttpMessageHandler(HttpClientHandler); ;
+            }).ConfigurePrimaryHttpMessageHandler(HttpClientHandler);
+
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-GB");
 
             return builder.Build();
         }

@@ -18,6 +18,11 @@ namespace CalmingEssenceTherapies.App.Services
             return await _client.GetFromJsonAsync<Treatment>($"/Treatment/{treatmentId}");
         }
 
+        public async Task<List<ManageTreatment>?> GetAllTreatments()
+        {
+            return await _client.GetFromJsonAsync<List<ManageTreatment>>("/Treatment/GetTreatments");
+        }
+
         public async Task AddTreatment(string name, string? description, decimal price, int categoryId, FileResult? treatmentImage)
         {
             var requestContent = new MultipartFormDataContent();

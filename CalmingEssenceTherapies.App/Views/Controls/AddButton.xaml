@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Button xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="CalmingEssenceTherapies.App.Views.Controls.AddButton"
+        ImageSource="addbutton.svg"
+        BackgroundColor="#2E7D32"
+        CornerRadius="30"
+        HeightRequest="60"
+        WidthRequest="60"
+        Padding="16"
+        VerticalOptions="End"
+        HorizontalOptions="End"
+        Margin="30"
+        SemanticProperties.Description="Add" />

@@ -28,7 +28,7 @@ namespace CalmingEssenceTherapies.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CalmingEssenceTherapies.Data.Models.Treatment", b =>
@@ -60,7 +60,7 @@ namespace CalmingEssenceTherapies.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Treatments");
+                    b.ToTable("Treatments", (string)null);
                 });
 
             modelBuilder.Entity("CalmingEssenceTherapies.Data.Models.Treatment", b =>

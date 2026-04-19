@@ -1,4 +1,5 @@
-﻿using CalmingEssenceTherapies.App.Models;
+﻿using CalmingEssenceTherapies.App.Helpers;
+using CalmingEssenceTherapies.App.Models;
 using CalmingEssenceTherapies.App.Services.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -58,7 +59,20 @@ public partial class AddTreatmentViewModel : ObservableObject
     [RelayCommand]
     public async Task AddTreatment()
     {
-        await _treatmentService.AddTreatment(Name, Description, Price, SelectedCategoryId, TreatmentImage);
+        try
+        {
+            await _treatmentService.AddTreatment(Name, Description, Price, SelectedCategoryId, TreatmentImage);
+            await ToastHelper.ShowToast("Treatment added successfully!");
+        }
+        catch (Exception ex)
+        {
+            await ToastHelper.ShowToast("Failed to add treatment. Please try again.");
+            Console.WriteLine(ex);
+        }
+        finally
+        {
+            ClearFields();
+        }
     }
 
     [RelayCommand]
@@ -85,6 +99,16 @@ public partial class AddTreatmentViewModel : ObservableObject
         {
             Console.WriteLine(ex);
         }
+    }
+
+    private void ClearFields()
+    {
+        Name = string.Empty;
+        Description = null;
+        Price = 0;
+        SelectedCategory = null;
+        TreatmentImage = null;
+        TreatmentImageFileName = null;
     }
 
 }

@@ -4,8 +4,19 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CalmingEssenceTherapies.App.ViewModels;
 
-public partial class TreatmentDetailsViewModel : ObservableObject
+public partial class TreatmentDetailsViewModel : ObservableObject, IQueryAttributable
 {
+    public async void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        int? id = int.TryParse(query["id"].ToString(), out var parsedId) ? parsedId : null;
+        if (id == null)
+        {
+            Console.WriteLine("Invalid treatment ID.");
+            return;
+        }
+        Id = id.Value;
+        await Refresh();
+    }
 
     private readonly ITreatmentService _treatmentService;
 
@@ -30,12 +41,6 @@ public partial class TreatmentDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task Appearing()
-    {
-        await Refresh();
-    }
-
-    [RelayCommand]
     private async Task Refresh()
     {
         try
@@ -53,13 +58,12 @@ public partial class TreatmentDetailsViewModel : ObservableObject
     {
         try
         {
-            var treatmentDetails = await _treatmentService.GetTreatmentDetails(1);
+            var treatmentDetails = await _treatmentService.GetTreatmentDetails(Id);
             if (treatmentDetails == null)
             {
                 Console.WriteLine("Treatment details not found.");
                 return;
             }
-            Id = treatmentDetails.Id;
             Name = treatmentDetails.Name;
             Description = treatmentDetails.Description;
             Price = treatmentDetails.Price;
