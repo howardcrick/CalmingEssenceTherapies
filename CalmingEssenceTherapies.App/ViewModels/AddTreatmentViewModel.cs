@@ -30,6 +30,14 @@ public partial class AddTreatmentViewModel : ObservableObject
     [ObservableProperty]
     public partial Category? SelectedCategory { get; set; }
 
+    [ObservableProperty]
+    public partial int DurationHours { get; set; }
+
+    [ObservableProperty]
+    public partial int DurationMinutes { get; set; }
+
+    private int Duration => (DurationHours * 60) + DurationMinutes;
+
     private int SelectedCategoryId => SelectedCategory?.Id ?? 0;
 
     private FileResult? TreatmentImage { get; set; }
@@ -61,7 +69,7 @@ public partial class AddTreatmentViewModel : ObservableObject
     {
         try
         {
-            await _treatmentService.AddTreatment(Name, Description, Price, SelectedCategoryId, TreatmentImage);
+            await _treatmentService.AddTreatment(Name, Description, Price, SelectedCategoryId, Duration, TreatmentImage);
             await ToastHelper.ShowToast("Treatment added successfully!");
         }
         catch (Exception ex)

@@ -47,6 +47,7 @@ public static class EnvironmentSeeder
                 Description = "A therapeutic massage that uses a combination of long gliding strokes, kneading, and circular movements to promote relaxation, relieve muscle tension, and improve circulation.",
                 Price = 35m,
                 CategoryId = 1,
+                Duration = 30
             },
             new Treatment
             {
@@ -54,6 +55,7 @@ public static class EnvironmentSeeder
                 Description = "Using smooth, heated stones to allow for a deeper and more effective massage, while also promoting deep relaxation and helping to relieve stress and pain.",
                 Price = 35m,
                 CategoryId = 1,
+                Duration = 60
             },
             new Treatment
             {
@@ -61,13 +63,15 @@ public static class EnvironmentSeeder
                 Description = "Achieve glowing skin results with medic grade customised skincare. Depending on your skin needs this express facial will include dermaplaning, oxygen on the face, mini microdermabrasion, extractions and a customised sheet or face mask.",
                 Price = 35m,
                 CategoryId = 2,
+                Duration = 40
             },
             new Treatment
             {
                 Name = "Eyebrow Wax",
                 Description = "Massage using essential oils to promote relaxation and emotional wellbeing.",
                 Price = 11.5m,
-                CategoryId = 3
+                CategoryId = 3,
+                Duration = 15
             }
         };
 

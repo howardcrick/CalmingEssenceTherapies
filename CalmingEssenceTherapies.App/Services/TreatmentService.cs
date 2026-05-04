@@ -23,12 +23,13 @@ namespace CalmingEssenceTherapies.App.Services
             return await _client.GetFromJsonAsync<List<ManageTreatment>>("/Treatment/GetTreatments");
         }
 
-        public async Task AddTreatment(string name, string? description, decimal price, int categoryId, FileResult? treatmentImage)
+        public async Task AddTreatment(string name, string? description, decimal price, int categoryId, int duration, FileResult? treatmentImage)
         {
             var requestContent = new MultipartFormDataContent();
 
             requestContent.Add(new StringContent(name), "Name");
             requestContent.Add(new StringContent(description ?? string.Empty), "Description");
+            requestContent.Add(new StringContent(duration.ToString()), "Duration");
             requestContent.Add(new StringContent(price.ToString(CultureInfo.InvariantCulture)), "Price");
             requestContent.Add(new StringContent(categoryId.ToString()), "CategoryId");
 
@@ -40,8 +41,23 @@ namespace CalmingEssenceTherapies.App.Services
                 requestContent.Add(streamContent, "TreatmentImage", treatmentImage.FileName);
             }
 
-            await _client.PostAsync("/Treatment", requestContent);
+            await _client.PostAsync("/Treatment/Add", requestContent);
         }
 
+        public async Task EditTreatment(int id, string name, string? description, decimal price, int categoryId, int duration)
+        {
+            var treatmentDetails = new EditTreatment
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                Price = price,
+                CategoryId = categoryId,
+                Duration = duration
+            };
+
+            await _client.PostAsJsonAsync<EditTreatment>("/Treatment/Edit", treatmentDetails);
+        }
     }
+
 }

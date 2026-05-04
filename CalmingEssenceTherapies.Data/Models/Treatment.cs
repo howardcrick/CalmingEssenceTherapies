@@ -10,4 +10,5 @@ public class Treatment
     public string? ImageFileName { get; set; }
     public int CategoryId { get; set; }
     public Category Category { get; set; } = null!;
+    public required int Duration { get; set; }
 }

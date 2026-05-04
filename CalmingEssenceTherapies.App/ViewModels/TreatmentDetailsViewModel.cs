@@ -1,4 +1,6 @@
-﻿using CalmingEssenceTherapies.App.Services.Abstractions;
+﻿using CalmingEssenceTherapies.App.Helpers;
+using CalmingEssenceTherapies.App.Models;
+using CalmingEssenceTherapies.App.Services.Abstractions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -20,11 +22,10 @@ public partial class TreatmentDetailsViewModel : ObservableObject, IQueryAttribu
 
     private readonly ITreatmentService _treatmentService;
 
-    [ObservableProperty]
-    public partial int Id { get; set; }
+    private int Id;
 
     [ObservableProperty]
-    public partial string Name { get; set; } = "";
+    public required partial string Name { get; set; }
 
     [ObservableProperty]
     public partial string? Description { get; set; }
@@ -33,7 +34,25 @@ public partial class TreatmentDetailsViewModel : ObservableObject, IQueryAttribu
     public partial decimal Price { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ChangeTreatmentImageText))]
+    public partial string? ImageUrl { get; set; }
+
+    [ObservableProperty]
+    public required partial Category SelectedCategory { get; set; }
+
+    [ObservableProperty]
+    public partial int DurationHours { get; set; }
+
+    [ObservableProperty]
+    public partial int DurationMinutes { get; set; }
+
+    private int Duration => (DurationHours * 60) + DurationMinutes;
+
+    [ObservableProperty]
     public partial bool IsRefreshing { get; set; }
+
+
+    public string ChangeTreatmentImageText => ImageUrl == null ? "Add Image" : "Replace Image";
 
     public TreatmentDetailsViewModel(ITreatmentService treatmentService)
     {
@@ -67,10 +86,33 @@ public partial class TreatmentDetailsViewModel : ObservableObject, IQueryAttribu
             Name = treatmentDetails.Name;
             Description = treatmentDetails.Description;
             Price = treatmentDetails.Price;
+            ImageUrl = treatmentDetails.ImageUrl?.GetImageUrl();
+            DurationHours = treatmentDetails.Duration / 60;
+            DurationMinutes = treatmentDetails.Duration % 60;
+            SelectedCategory = new Category
+            {
+                Id = treatmentDetails.Category.Id,
+                Name = treatmentDetails.Category.Name
+            };
             Console.WriteLine("Success!");
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex);
+        }
+    }
+
+    [RelayCommand]
+    public async Task SaveTreatment()
+    {
+        try
+        {
+            await _treatmentService.EditTreatment(Id, Name, Description, Price, SelectedCategory.Id, Duration);
+            await ToastHelper.ShowToast("Treatment saved successfully!");
+        }
+        catch (Exception ex)
+        {
+            await ToastHelper.ShowToast("Failed to edit treatment. Please try again.");
             Console.WriteLine(ex);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
+
 [assembly: UsesPermission(Android.Manifest.Permission.ReadExternalStorage, MaxSdkVersion = 32)]
 [assembly: UsesPermission(Android.Manifest.Permission.ReadMediaAudio)]
 [assembly: UsesPermission(Android.Manifest.Permission.ReadMediaImages)]
@@ -8,7 +9,11 @@ using Android.Runtime;
 
 namespace CalmingEssenceTherapies.App
 {
+#if DEBUG
+    [Application(UsesCleartextTraffic = true)]
+#else
     [Application]
+#endif
     public class MainApplication : MauiApplication
     {
         public MainApplication(IntPtr handle, JniHandleOwnership ownership)

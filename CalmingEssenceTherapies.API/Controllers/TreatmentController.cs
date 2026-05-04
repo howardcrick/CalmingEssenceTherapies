@@ -14,11 +14,19 @@ namespace CalmingEssenceTherapies.API.Controllers
             return await treatmentService.GetTreatmentDetails(treatmentId);
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IResult> AddTreatment([FromForm] AddTreatmentDto treatment, ITreatmentService treatmentService)
         {
-            await treatmentService.AddTreatment(treatment.Name, treatment.Description, treatment.Price, treatment.CategoryId, treatment.TreatmentImage);
+            await treatmentService.AddTreatment(treatment.Name, treatment.Description, treatment.Price, treatment.CategoryId, treatment.Duration, treatment.TreatmentImage);
+            return Results.Ok();
+        }
+
+        [HttpPost("Edit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IResult> EditTreatment([FromBody] EditTreatmentDto treatment, ITreatmentService treatmentService)
+        {
+            await treatmentService.EditTreatment(treatment.Id, treatment.Name, treatment.Description, treatment.Price, treatment.CategoryId, treatment.Duration);
             return Results.Ok();
         }
 

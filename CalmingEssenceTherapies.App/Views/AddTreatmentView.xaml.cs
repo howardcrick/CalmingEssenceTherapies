@@ -16,6 +16,10 @@ public partial class AddTreatmentView : ContentPage
         if (sender is Entry entry && decimal.TryParse(entry.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out var value))
         {
             entry.Text = value.ToString("0.##");
+            if (entry.Text == "0")
+            {
+                entry.Text = "";
+            }
         }
     }
 

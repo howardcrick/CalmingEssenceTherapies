@@ -1,5 +1,6 @@
 ﻿using CalmingEssenceTherapies.Data;
 using CalmingEssenceTherapies.Data.Models;
+using CalmingEssenceTherapies.Services.Categories;
 using CalmingEssenceTherapies.Services.Treatments.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,14 @@ public class TreatmentService : ITreatmentService
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                Price = x.Price
+                Price = x.Price,
+                ImageUrl = x.ImageUrl,
+                Duration = x.Duration,
+                Category = new CategoryDto
+                {
+                    Id = x.Category.Id,
+                    Name = x.Category.Name
+                }
             }).SingleAsync();
     }
 
@@ -58,7 +66,7 @@ public class TreatmentService : ITreatmentService
             }).ToListAsync();
     }
 
-    public async Task AddTreatment(string name, string? description, decimal price, int categoryId, IFormFile? treatmentImage)
+    public async Task AddTreatment(string name, string? description, decimal price, int categoryId, int duration, IFormFile? treatmentImage)
     {
         var categoryExists = await _context.Categories
             .AnyAsync(c => c.Id == categoryId);
@@ -83,12 +91,53 @@ public class TreatmentService : ITreatmentService
             Description = description,
             Price = price,
             CategoryId = categoryId,
+            Duration = duration,
             ImageUrl = imageUrl,
-            ImageFileName = treatmentImage?.FileName
+            ImageFileName = treatmentImage?.FileName,
         };
 
         _context.Treatments.Add(newTreatment);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task EditTreatment(int id, string name, string? description, decimal price, int categoryId, int duration)
+    {
+        var treatment = await _context.Treatments.Where(t => t.Id == id).SingleAsync();
+
+        var categoryExists = await _context.Categories
+            .AnyAsync(c => c.Id == categoryId);
+
+        if (!categoryExists)
+        {
+            throw new ArgumentException(
+                $"Category with Id {categoryId} does not exist.",
+                nameof(categoryId));
+        }
+
+        treatment.Name = name;
+        treatment.Description = description;
+        treatment.Price = price;
+        treatment.CategoryId = categoryId;
+        treatment.Duration = duration;
+
+        await _context.SaveChangesAsync();
+    }
+
+    private async Task DeletePreviousImage(int treatmentId)
+    {
+        var imageUrl = await _context.Treatments
+            .Where(t => t.Id == treatmentId)
+            .Select(t => t.ImageUrl)
+            .SingleOrDefaultAsync();
+
+        if (imageUrl == null) return;
+
+        string filePath = Path.Combine(_webRootPath, imageUrl);
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
     }
 
     private async Task<string> SaveTreatmentImageAsync(IFormFile image)
@@ -126,6 +175,9 @@ public class TreatmentDto
     public required string Name { get; set; }
     public string? Description { get; set; }
     public required decimal Price { get; set; }
+    public string? ImageUrl { get; set; }
+    public required CategoryDto Category { get; set; }
+    public required int Duration { get; set; }
 }
 
 public class ManageTreatmentDto
@@ -142,4 +194,16 @@ public class AddTreatmentDto
     public required decimal Price { get; set; }
     public required int CategoryId { get; set; }
     public IFormFile? TreatmentImage { get; set; }
+    public required int Duration { get; set; }
+}
+
+public class EditTreatmentDto
+{
+    public required int Id { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    public required decimal Price { get; set; }
+    public required int CategoryId { get; set; }
+    public required int Duration { get; set; }
+
 }

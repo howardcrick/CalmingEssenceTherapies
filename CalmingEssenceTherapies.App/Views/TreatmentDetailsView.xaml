@@ -4,20 +4,45 @@
              xmlns:viewModels="clr-namespace:CalmingEssenceTherapies.App.ViewModels"
              x:Class="CalmingEssenceTherapies.App.Views.TreatmentDetailsView"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:CalmingEssenceTherapies.App.Views.Controls"
              Title="Treatment Details"
              x:DataType="viewModels:TreatmentDetailsViewModel"
+             xmlns:app="clr-namespace:CalmingEssenceTherapies.App"
              x:Name="TreatmentDetails">
-    <VerticalStackLayout>
-        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
+    <VerticalStackLayout Padding="10" Spacing="5">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="5" ColumnSpacing="10" >
 
-            <Label Text="Name:"        Grid.Row="0" Margin="0,0,5,0" />
-            <Label Text="Description:" Grid.Row="1" Margin="0,0,5,0" />
-            <Label Text="Price:"       Grid.Row="2" Margin="0,0,5,0" />
+            <Label Text="Name:"        Grid.Row="0" VerticalOptions="Center" />
+            <Label Text="Description:" Grid.Row="1" VerticalOptions="Center"  />
+            <Label Text="Price:"       Grid.Row="2" VerticalOptions="Center"  />
+            <Label Text="Duration:" Grid.Row="3" VerticalOptions="Center"/>
 
-            <Label Text="{Binding Name}"        Grid.Row="0" Grid.Column="1" />
-            <Label Text="{Binding Description}" Grid.Row="1" Grid.Column="1" />
-            <Label Text="{Binding Price, StringFormat='{0:C}'}"       
-                                        Grid.Row="2" Grid.Column="1" />
+            <Entry Text="{Binding Name}"  Grid.Row="0" Grid.Column="1"  />
+            <Entry Text="{Binding Description}" Grid.Row="1" Grid.Column="1" />
+            <controls:PriceEntry Text="{Binding Price, StringFormat='{0:C}'}" Grid.Row="2" Grid.Column="1" />
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="1" >
+                <Grid>
+                    <Entry Text="{Binding DurationHours, StringFormat='{0} hr'}" InputTransparent="True"/>
+                    <Picker
+                    Title="Hours"
+                    ItemsSource="{x:Static app:Constants.DurationHours}"
+                    SelectedItem="{Binding DurationHours}"
+                    WidthRequest="1" Opacity="0"/>
+                </Grid>
+
+                <Grid>
+                    <Entry Text="{Binding DurationMinutes, StringFormat='{0} mins'}" InputTransparent="True"/>
+                    <Picker
+                    Title="Minutes"
+                    ItemsSource="{x:Static app:Constants.DurationMinutes}"
+                    SelectedItem="{Binding DurationMinutes}"
+                    WidthRequest="1" Opacity="0"/>
+                </Grid>
+
+            </HorizontalStackLayout>
         </Grid>
+        <Image Source="{Binding ImageUrl}" />
+        <Button Text="{Binding ChangeTreatmentImageText}"></Button>
+        <Button Text="Save" Command="{Binding SaveTreatmentCommand}" />
     </VerticalStackLayout>
 </ContentPage>

@@ -4,6 +4,8 @@
              xmlns:viewModels="clr-namespace:CalmingEssenceTherapies.App.ViewModels"
              x:Class="CalmingEssenceTherapies.App.Views.AddTreatmentView"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:CalmingEssenceTherapies.App.Views.Controls"
+             xmlns:app="clr-namespace:CalmingEssenceTherapies.App"
              Title="Add Treatment"
              x:DataType="viewModels:AddTreatmentViewModel"
              x:Name="AddTreatment">
@@ -28,18 +30,24 @@
             ItemDisplayBinding="{Binding Name}"
             SelectedItem="{Binding SelectedCategory}" />
 
-        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" Margin="10">
 
             <Label Text="Name:"        Grid.Row="0" Margin="0,0,5,0" />
             <Label Text="Description:" Grid.Row="1" Margin="0,0,5,0" />
             <Label Text="Price:"       Grid.Row="2" Margin="0,0,5,0" />
+            <Label Text="Duration:" Grid.Row="3" Margin="0,0,5,0" />
 
             <Entry Text="{Binding Name}" Placeholder="Name" Grid.Row="0" Grid.Column="1" />
             <Entry Text="{Binding Description}" Placeholder="Enter Description" Grid.Row="1" Grid.Column="1" />
-            <Entry Text="{Binding Price}" Placeholder="Enter Price" Keyboard="Numeric" Grid.Row="2" Grid.Column="1"
-                Unfocused="PriceEntry_Unfocused"
-                Focused="PriceEntry_Focused">
-            </Entry>
+            <controls:PriceEntry Placeholder="Enter Price" Text="{Binding Price, StringFormat='{0:C}'}" Grid.Row="2" Grid.Column="1"/>
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
+                <Picker Title="Hours"
+                    ItemsSource="{x:Static app:Constants.DurationHours}"
+                    SelectedItem="{Binding DurationHours}" />
+                <Picker Title="Minutes"
+                    ItemsSource="{x:Static app:Constants.DurationMinutes}"
+                    SelectedItem="{Binding DurationMinutes}" />
+            </HorizontalStackLayout>
         </Grid>
         <Button Text="Select Treatment Image" Command="{Binding SelectTreatmentImageCommand}" />
         <Label Text="{Binding TreatmentImageFileName}" />
